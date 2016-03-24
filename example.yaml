@@ -1,0 +1,14 @@
+# List all repos you will be working with, specifying:
+#   source:   Path to clone the code from
+#   mainline: The branch to compare to when determining what has changed (defaults to master for a git repo, and trunk for an svn one)
+monitored_repos:
+  utils:
+    source: git@github.com:linqia/utils.git
+  storm_helpers:
+    source: git@github.com:linqia/storm-helpers.git
+  api:
+    source: git@github.com:linqia/api.git
+    mainline: release
+
+credentials:
+    github_ssh: /home/linqia/.ssh/github.pem
