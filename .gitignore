@@ -1,0 +1,8 @@
+# Ignore eclipse debris
+.classpath
+.settings
+.project
+*.launch
+
+# Ignore maven debris
+/core/target
