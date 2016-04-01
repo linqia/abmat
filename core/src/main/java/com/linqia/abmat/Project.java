@@ -4,9 +4,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.maven.cli.MavenCli;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
@@ -108,7 +110,11 @@ public class Project {
      * Install this maven project
      */
     public void install() {
-        throw new UnsupportedOperationException();
+        String[] args = new String[] { "test" };
+        String wd = ".";
+        PrintStream stdout = System.out;
+        PrintStream stderr = System.err;
+        new MavenCli().doMain(args, wd, stdout, stderr);
     }
 
     @Override

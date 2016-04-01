@@ -1,0 +1,45 @@
+Data Model
+==========
+RepoAndBranch - A branch on a remote repo
+* String repository
+* String mainline
+* String branch
+
+PullRequest - A reference to a remote pull request
+* String repository
+* String pullRequestId
+* RepoAndBranch[] getBranches()
+
+WorkingCopy - A RepoAndBranched checked out on a local folder
+* RepoAndBranch branch
+* String folder
+* boolean assertProjects(File[] poms) - Asserts that the given poms exist. This is used to fail fast if tracked projects in the yaml are missing in actual repos, rather than silently skipping them
+* Project[] getChangedProjects() - Compare the current branch of the repo against its mainline. Find all changed files, walking upwards to find a pom.xml. Return the Project entries for each unique pom you find this way. If the workspace is already on its mainline, this returns an empty list
+
+Workspace - A collection of WorkingCopies and a link to a (maybe private) maven repo
+* String baseDir
+* ? mavenRepo
+* WorkingCopy[] getWorkingCopies()
+* Project[] getProjects()
+
+AbMat - The bootstrap object for this whole thing. Preferences loaded from yaml
+* PullRequest[] getPullRequests() - For all monitored-repos where pull requests are supported, pull every open pull request. Drop any where no changes have been made since last abmat post. Any that have a special tag referencing another pull request will return that branch as well.
+* Workspace setupWorkspace(RepoAndBranch[]) - Get a local workspace setup with each repo checked out to the right branch. Based on config, this can be a new workspace each time (for build servers) or re-use a single workspace each time (for local dev machines). Workspaces are bound to maven repos as well, so two Workspaces will never use the same maven repo.
+
+Random notes
+============
+maven versions plugin 2.2 has a NPE during this command:
+
+    mvn -X versions:set -DgroupId=joda-time -DartifactId=joda-time -DoldVersion=2.9.2 -DnewVersion=3.0.0 -DprocessParent=false
+
+Test out 2.3
+
+For each pom being built:
+* Check dependencies, and make sure that all previously built poms are referenced by the correct version
+* Check dependencies, and make sure no unbuilt poms are referenced
+
+Extras
+======
+* All java projects' master branches should be using the newest Linqia dependencies
+* I should know on my stormy branch if it will break anything downstream before I merge it
+* We should know if anyone's using different dependencies (two different versions)
